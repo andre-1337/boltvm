@@ -13,6 +13,7 @@ use backtrace::Backtrace;
 pub struct BoltVM {
     /// 65535 registers in total
     pub registers: Vec<Value>,
+    pub stack: Vec<Value>,
     pub frames: Vec<StackFrame>,
 }
 
@@ -26,6 +27,7 @@ impl BoltVM {
 
         Self {
             registers: regs,
+            stack: vec![],
             frames: vec![],
         }
     }
@@ -126,216 +128,221 @@ impl BoltVM {
                     self.registers[register.as_index()] = Value::Bool(value)
                 }
 
-                Instruction::AddInt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::AddInt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::AddInt"),
                         line: 129,
                     });
 
-                    let a = self.get_int(src_reg1).unwrap();
-                    let b = self.get_int(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Int(a + b);
+                    let a = self.get_int(source_register1).unwrap();
+                    let b = self.get_int(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Int(a + b);
                 }
 
-                Instruction::AddFlt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::AddFlt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::AddFlt"),
                         line: 141,
                     });
 
-                    let a = self.get_float(src_reg1).unwrap();
-                    let b = self.get_float(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Float(a + b);
+                    let a = self.get_float(source_register1).unwrap();
+                    let b = self.get_float(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Float(a + b);
                 }
 
-                Instruction::SubInt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::SubInt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::SubInt"),
                         line: 153,
                     });
 
-                    let a = self.get_int(src_reg1).unwrap();
-                    let b = self.get_int(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Int(a - b);
+                    let a = self.get_int(source_register1).unwrap();
+                    let b = self.get_int(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Int(a - b);
                 }
 
-                Instruction::SubFlt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::SubFlt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::SubFlt"),
                         line: 165,
                     });
 
-                    let a = self.get_float(src_reg1).unwrap();
-                    let b = self.get_float(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Float(a - b);
+                    let a = self.get_float(source_register1).unwrap();
+                    let b = self.get_float(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Float(a - b);
                 }
 
-                Instruction::MulInt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::MulInt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::MulInt"),
                         line: 177,
                     });
 
-                    let a = self.get_int(src_reg1).unwrap();
-                    let b = self.get_int(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Int(a * b);
+                    let a = self.get_int(source_register1).unwrap();
+                    let b = self.get_int(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Int(a * b);
                 }
 
-                Instruction::MulFlt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::MulFlt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::MulFlt"),
                         line: 189,
                     });
 
-                    let a = self.get_float(src_reg1).unwrap();
-                    let b = self.get_float(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Float(a * b);
+                    let a = self.get_float(source_register1).unwrap();
+                    let b = self.get_float(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Float(a * b);
                 }
 
-                Instruction::DivInt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::DivInt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::DivInt"),
                         line: 201,
                     });
 
-                    let a = self.get_int(src_reg1).unwrap();
-                    let b = self.get_int(src_reg2).unwrap();
+                    let a = self.get_int(source_register1).unwrap();
+                    let b = self.get_int(source_register2).unwrap();
 
                     if b == 0 {
                         return Err(Error::DivisionByZero);
                     } else {
-                        self.registers[dest_reg.as_index()] = Value::Int(a / b);
+                        self.registers[destination_register.as_index()] = Value::Int(a / b);
                     }
                 }
 
-                Instruction::DivFlt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::DivFlt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::DivFlt"),
                         line: 218,
                     });
 
-                    let a = self.get_float(src_reg1).unwrap();
-                    let b = self.get_float(src_reg2).unwrap();
+                    let a = self.get_float(source_register1).unwrap();
+                    let b = self.get_float(source_register2).unwrap();
 
                     if b == 0.0 {
                         return Err(Error::DivisionByZero);
                     } else {
-                        self.registers[dest_reg.as_index()] = Value::Float(a / b);
+                        self.registers[destination_register.as_index()] = Value::Float(a / b);
                     }
                 }
 
-                Instruction::ConcatStrings(dest_reg, src_reg1, src_reg2) => {
+                Instruction::ConcatStrings(
+                    destination_register,
+                    source_register1,
+                    source_register2,
+                ) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::ConcatStrings"),
                         line: 235,
                     });
 
-                    let a = self.get_string(src_reg1).unwrap();
-                    let b = self.get_string(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::String(format!("{}{}", a, b));
+                    let a = self.get_string(source_register1).unwrap();
+                    let b = self.get_string(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] =
+                        Value::String(format!("{}{}", a, b));
                 }
 
-                Instruction::AndBool(dest_reg, src_reg1, src_reg2) => {
+                Instruction::AndBool(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::AndBool"),
                         line: 247,
                     });
 
-                    let a = self.get_bool(src_reg1).unwrap();
-                    let b = self.get_bool(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Bool(a && b);
+                    let a = self.get_bool(source_register1).unwrap();
+                    let b = self.get_bool(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Bool(a && b);
                 }
 
-                Instruction::OrBool(dest_reg, src_reg1, src_reg2) => {
+                Instruction::OrBool(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::OrBool"),
                         line: 259,
                     });
 
-                    let a = self.get_bool(src_reg1).unwrap();
-                    let b = self.get_bool(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Bool(a || b);
+                    let a = self.get_bool(source_register1).unwrap();
+                    let b = self.get_bool(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Bool(a || b);
                 }
 
-                Instruction::LtInt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::LtInt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::LtInt"),
                         line: 271,
                     });
 
-                    let a = self.get_int(src_reg1).unwrap();
-                    let b = self.get_int(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Bool(a < b);
+                    let a = self.get_int(source_register1).unwrap();
+                    let b = self.get_int(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Bool(a < b);
                 }
 
-                Instruction::GtInt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::GtInt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::GtInt"),
                         line: 283,
                     });
 
-                    let a = self.get_int(src_reg1).unwrap();
-                    let b = self.get_int(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Bool(a > b);
+                    let a = self.get_int(source_register1).unwrap();
+                    let b = self.get_int(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Bool(a > b);
                 }
 
-                Instruction::LtFlt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::LtFlt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::LtFlt"),
                         line: 295,
                     });
 
-                    let a = self.get_float(src_reg1).unwrap();
-                    let b = self.get_float(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Bool(a < b);
+                    let a = self.get_float(source_register1).unwrap();
+                    let b = self.get_float(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Bool(a < b);
                 }
 
-                Instruction::GtFlt(dest_reg, src_reg1, src_reg2) => {
+                Instruction::GtFlt(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::GtFlt"),
                         line: 307,
                     });
 
-                    let a = self.get_float(src_reg1).unwrap();
-                    let b = self.get_float(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Bool(a > b);
+                    let a = self.get_float(source_register1).unwrap();
+                    let b = self.get_float(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Bool(a > b);
                 }
 
-                Instruction::EqBool(dest_reg, src_reg1, src_reg2) => {
+                Instruction::EqBool(destination_register, source_register1, source_register2) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::EqBool"),
                         line: 319,
                     });
 
-                    let a = self.get_bool(src_reg1).unwrap();
-                    let b = self.get_bool(src_reg2).unwrap();
-                    self.registers[dest_reg.as_index()] = Value::Bool(a == b);
+                    let a = self.get_bool(source_register1).unwrap();
+                    let b = self.get_bool(source_register2).unwrap();
+                    self.registers[destination_register.as_index()] = Value::Bool(a == b);
                 }
 
-                Instruction::Print(reg_or_val) => {
+                Instruction::Print(value_or_register) => {
                     self.frames.push(StackFrame {
                         file_name: String::from("boltvm"),
                         function_name: String::from("Instruction::Print"),
                         line: 331,
                     });
 
-                    match reg_or_val {
+                    match value_or_register {
                         ValueOrRegister::Value(string) => print!("{}", string),
                         ValueOrRegister::Register(register) => {
                             let value = &self.registers[register.as_index()];
@@ -345,21 +352,21 @@ impl BoltVM {
                 }
 
                 Instruction::CreateArray(register) => {
-					self.frames.push(StackFrame {
-						file_name: String::from("boltvm"),
-						function_name: String::from("Instruction::CreateArray"),
-						line: 347
-					});
+                    self.frames.push(StackFrame {
+                        file_name: String::from("boltvm"),
+                        function_name: String::from("Instruction::CreateArray"),
+                        line: 347,
+                    });
 
                     self.registers[register.as_index()] = Value::Array(Vec::new());
                 }
 
                 Instruction::ArrayAdd(register, value) => {
-					self.frames.push(StackFrame {
-						file_name: String::from("boltvm"),
-						function_name: String::from("Instruction::ArrayAdd"),
-						line: 357
-					});
+                    self.frames.push(StackFrame {
+                        file_name: String::from("boltvm"),
+                        function_name: String::from("Instruction::ArrayAdd"),
+                        line: 357,
+                    });
 
                     if let Value::Array(array) = &mut self.registers[register.as_index()] {
                         array.push(value);
@@ -368,21 +375,42 @@ impl BoltVM {
                     }
                 }
 
-                Instruction::GetArrayElemPtr(dest_reg, array_reg, index) => {
-					self.frames.push(StackFrame {
-						file_name: String::from("boltvm"),
-						function_name: String::from("Instruction::GetArrayElemPtr"),
-						line: 371
-					});
+                Instruction::GetArrayElemPtr(destination_register, array_register, index) => {
+                    self.frames.push(StackFrame {
+                        file_name: String::from("boltvm"),
+                        function_name: String::from("Instruction::GetArrayElemPtr"),
+                        line: 371,
+                    });
 
-                    if let Value::Array(array) = &self.registers[array_reg.as_index()] {
+                    if let Value::Array(array) = &self.registers[array_register.as_index()] {
                         if let Some(value) = array.get(index) {
-                            self.registers[dest_reg.as_index()] = value.clone();
+                            self.registers[destination_register.as_index()] = value.clone();
                         } else {
                             return Err(Error::ArrayIndexOutOfBounds(index));
                         }
                     } else {
-                        return Err(Error::ExpectedType("array", array_reg));
+                        return Err(Error::ExpectedType("array", array_register));
+                    }
+                }
+
+                Instruction::GetArrayLength(array_register, destination_register) => {
+                    if let Value::Array(array) = &self.registers[array_register.as_index()] {
+                        let length = array.len();
+                        self.registers[destination_register.as_index()] = Value::Int(length as i32);
+                    } else {
+                        return Err(Error::ExpectedType("array", array_register));
+                    }
+                }
+
+                Instruction::Push(value) => {
+                    self.stack.push(value);
+                }
+
+                Instruction::Pop(register) => {
+                    if let Some(value) = self.stack.pop() {
+                        self.registers[register.as_index()] = value;
+                    } else {
+                        return Err(Error::StackIsEmpty);
                     }
                 }
 
@@ -425,13 +453,24 @@ impl BoltVM {
         }
     }
 
-    pub fn dump_register_contents(&self) {
-        println!("register contents:");
-        let mut used_registers = 0;
+    #[inline]
+    #[allow(dead_code)]
+    fn get_array(&self, register: Register) -> Result<Vec<Value>> {
+        match &self.registers[register.as_index()] {
+            Value::Array(value) => Ok(value.clone()),
+            _ => Err(Error::ExpectedType("array", register)),
+        }
+    }
 
-        for (i, val) in self.registers.iter().enumerate() {
-            if !val.is_null() {
-                println!("{}r{i}{}: {}", Color::Blue, Color::Reset, val);
+    pub fn debug_dump(&self) {
+        println!("========== debug dump ==========");
+        let mut used_registers = 0;
+        let mut values_left_on_stack = 0;
+
+        println!("registers:");
+        for (i, value) in self.registers.iter().enumerate() {
+            if !value.is_null() {
+                println!("	{}r{i}{}: {}", Color::Blue, Color::Reset, value);
                 used_registers += 1;
             }
         }
@@ -440,14 +479,31 @@ impl BoltVM {
         let unused_registers = total_registers - used_registers;
 
         println!(
-            "\nused registers: {}{used_registers}{}",
+            "\n	used registers: {}{used_registers}{}",
             Color::Green,
             Color::Reset
         );
         println!(
-            "unused registers: {}{unused_registers}{}",
+            "	unused registers: {}{unused_registers}{}\n",
             Color::Yellow,
             Color::Reset
         );
+
+        println!("stack:");
+        if !self.stack.is_empty() {
+            for (i, value) in self.stack.iter().enumerate() {
+                println!("	{}s{}{}: {}", Color::Blue, i, Color::Reset, value);
+                values_left_on_stack += 1;
+            }
+
+            println!(
+                "\n	values still on stack: {}{values_left_on_stack}{}",
+                Color::Yellow,
+                Color::Reset
+            );
+        } else {
+            println!("	{}stack is empty{}", Color::Red, Color::Reset);
+        }
+		println!("======= end of debug dump ======");
     }
 }

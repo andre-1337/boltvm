@@ -8,22 +8,24 @@ pub mod vm;
 use instruction::Instruction::*;
 use register::Register;
 use vm::BoltVM;
+use value::*;
 
 fn main() {
     let mut vm = BoltVM::new();
 
     let program = vec![
-        // errors!
-		LoadFlt(Register(1), 1.1),
-		LoadFlt(Register(2), 0.0),
-		DivFlt(Register(3), Register(1), Register(2)),
+		// array manipulation
+        Push(Value::String(String::from("Hello, world!"))),
+		Pop(Register(0)),
+		Print(ValueOrRegister::Register(Register(0))),
+		Push(Value::String(String::from("this should be still in stack"))),
         Halt,
     ];
 
     match vm.execute(program) {
         Ok(_) => {
             print!("\n\n");
-            vm.dump_register_contents();
+            vm.debug_dump();
         }
 
         Err(error) => {

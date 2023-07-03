@@ -32,6 +32,7 @@ pub enum Error {
     ExpectedType(&'static str, Register),
     ArrayIndexOutOfBounds(usize),
     DivisionByZero,
+    StackIsEmpty,
 }
 
 impl std::error::Error for Error {}
@@ -55,6 +56,10 @@ impl std::fmt::Display for Error {
 
             Self::DivisionByZero => {
                 write!(f, "{} division by zero", err)
+            }
+
+            Self::StackIsEmpty => {
+                write!(f, "{} stack is empty", err)
             }
         }
     }

@@ -53,6 +53,12 @@ pub enum Instruction {
     ArrayAdd(Register, Value),
     /// Gets an element at a certain index and stores it in the given register
     GetArrayElemPtr(Register, Register, usize),
+	/// Gets the length of an array and stores the result in the given register
+	GetArrayLength(Register, Register),
+	/// Push a value onto the stack
+	Push(Value),
+	/// Pops a value from the stack into a register
+	Pop(Register),
     /// Stop execution
     Halt,
 }
