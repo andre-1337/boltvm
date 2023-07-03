@@ -3,6 +3,7 @@
 pub struct Register(pub u16);
 
 impl Register {
+	#[inline]
     pub fn as_index(&self) -> usize {
         self.0 as usize
     }
@@ -10,6 +11,6 @@ impl Register {
 
 impl std::fmt::Display for Register {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-       write!(f, "r{}", self.0)
+        write!(f, "r{}", self.0)
     }
 }

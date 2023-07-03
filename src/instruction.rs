@@ -17,18 +17,18 @@ pub enum Instruction {
     AddInt(Register, Register, Register),
     /// Add two floats and store the result in a register
     AddFlt(Register, Register, Register),
-	/// Subtract two integers and store the result in a register
-	SubInt(Register, Register, Register),
-	/// Subtract two floats and store the result in a register
-	SubFlt(Register, Register, Register),
-	/// Multiply two integers and store the result in a register
-	MulInt(Register, Register, Register),
-	/// Multiply two floats and store the result in a register
-	MulFlt(Register, Register, Register),
-	/// Divide two integers and store the result in a register
-	DivInt(Register, Register, Register),
-	/// Divide two floats and store the result in a register
-	DivFlt(Register, Register, Register),
+    /// Subtract two integers and store the result in a register
+    SubInt(Register, Register, Register),
+    /// Subtract two floats and store the result in a register
+    SubFlt(Register, Register, Register),
+    /// Multiply two integers and store the result in a register
+    MulInt(Register, Register, Register),
+    /// Multiply two floats and store the result in a register
+    MulFlt(Register, Register, Register),
+    /// Divide two integers and store the result in a register
+    DivInt(Register, Register, Register),
+    /// Divide two floats and store the result in a register
+    DivFlt(Register, Register, Register),
     /// Concatenate two strings and store the result in a register
     ConcatStrings(Register, Register, Register),
     /// Perform a logical AND operation and store the result in a register
@@ -47,12 +47,12 @@ pub enum Instruction {
     EqBool(Register, Register, Register),
     /// Print the value of a register to standard output
     Print(ValueOrRegister),
-	/// Creates an array with the given register
-	CreateArray(Register),
-	/// Adds an element to the list
-	ArrayAdd(Register, Value),
-	/// Gets an element at a certain index and stores it in the given register
-	GetArrayElemPtr(Register, Register, usize),
+    /// Creates an array with the given register
+    CreateArray(Register),
+    /// Adds an element to the list
+    ArrayAdd(Register, Value),
+    /// Gets an element at a certain index and stores it in the given register
+    GetArrayElemPtr(Register, Register, usize),
     /// Stop execution
     Halt,
 }

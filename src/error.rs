@@ -50,11 +50,7 @@ impl std::fmt::Display for Error {
             }
 
             Self::ArrayIndexOutOfBounds(index) => {
-                write!(
-                    f,
-                    "{} index '{index}' is out of bounds for array",
-                    err
-                )
+                write!(f, "{} index '{index}' is out of bounds for array", err)
             }
 
             Self::DivisionByZero => {

@@ -7,53 +7,60 @@ pub enum Value {
     Float(f32),
     String(String),
     Bool(bool),
-	Array(Vec<Value>),
+    Array(Vec<Value>),
     Null,
 }
 
 impl Value {
-	pub fn is_int(&self) -> bool {
-		match *self {
-			Value::Int(_) => true,
-			_ => false,
-		}
-	}
+	#[inline]
+    pub fn is_int(&self) -> bool {
+        match *self {
+            Value::Int(_) => true,
+            _ => false,
+        }
+    }
 
-	pub fn is_float(&self) -> bool {
-		match *self {
-			Value::Float(_) => true,
-			_ => false,
-		}
-	}
+	#[inline]
+    pub fn is_float(&self) -> bool {
+        match *self {
+            Value::Float(_) => true,
+            _ => false,
+        }
+    }
 
-	pub fn is_string(&self) -> bool {
-		match *self {
-			Value::String(_) => true,
-			_ => false,
-		}
-	}
+	#[inline]
+    pub fn is_string(&self) -> bool {
+        match *self {
+            Value::String(_) => true,
+            _ => false,
+        }
+    }
 
-	pub fn is_bool(&self) -> bool {
-		match *self {
-			Value::Bool(_) => true,
-			_ => false,
-		}
-	}
+	#[inline]
+    pub fn is_bool(&self) -> bool {
+        match *self {
+            Value::Bool(_) => true,
+            _ => false,
+        }
+    }
 
-	pub fn is_list(&self) -> bool {
-		match *self {
-			Value::Array(_) => true,
-			_ => false,
-		}
-	}
+	#[inline]
+    pub fn is_list(&self) -> bool {
+        match *self {
+            Value::Array(_) => true,
+            _ => false,
+        }
+    }
 
-	pub fn is_null(&self) -> bool {
-		match *self {
-			Value::Null => true,
-			_ => false
-		}
-	}
+	#[inline]
+    pub fn is_null(&self) -> bool {
+        match *self {
+            Value::Null => true,
+            _ => false,
+        }
+    }
 
+	#[inline]
     pub fn as_bool(&self) -> bool {
         match *self {
             Value::Bool(value) => value,
@@ -61,6 +68,7 @@ impl Value {
         }
     }
 
+	#[inline]
     pub fn as_jump_target(&self) -> usize {
         match *self {
             Value::Int(value) => value as usize,
@@ -76,7 +84,7 @@ impl std::fmt::Display for Value {
             Value::Float(val) => write!(f, "{}", val),
             Value::String(val) => write!(f, "{}", val),
             Value::Bool(val) => write!(f, "{}", val),
-			Value::Array(val) => write!(f, "{:?}", val),
+            Value::Array(val) => write!(f, "{:?}", val),
             Value::Null => write!(f, "null"),
         }
     }
@@ -84,6 +92,6 @@ impl std::fmt::Display for Value {
 
 #[derive(Debug, Clone)]
 pub enum ValueOrRegister {
-	Value(String),
-	Register(Register),
+    Value(String),
+    Register(Register),
 }
