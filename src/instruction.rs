@@ -17,6 +17,18 @@ pub enum Instruction {
     AddInt(Register, Register, Register),
     /// Add two floats and store the result in a register
     AddFlt(Register, Register, Register),
+	/// Subtract two integers and store the result in a register
+	SubInt(Register, Register, Register),
+	/// Subtract two floats and store the result in a register
+	SubFlt(Register, Register, Register),
+	/// Multiply two integers and store the result in a register
+	MulInt(Register, Register, Register),
+	/// Multiply two floats and store the result in a register
+	MulFlt(Register, Register, Register),
+	/// Divide two integers and store the result in a register
+	DivInt(Register, Register, Register),
+	/// Divide two floats and store the result in a register
+	DivFlt(Register, Register, Register),
     /// Concatenate two strings and store the result in a register
     ConcatStrings(Register, Register, Register),
     /// Perform a logical AND operation and store the result in a register
