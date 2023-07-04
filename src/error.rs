@@ -1,6 +1,7 @@
 //! An error handler for the VM
 
 use crate::register::Register;
+use crate::types::*;
 
 /// Console colors, because >RGB
 #[derive(Debug, Clone)]
@@ -29,10 +30,12 @@ impl std::fmt::Display for Color {
 /// The type of error
 #[derive(Debug, Clone)]
 pub enum Error {
-    ExpectedType(&'static str, Register),
+    ExpectedType(String, Register),
     ArrayIndexOutOfBounds(usize),
     DivisionByZero,
-    StackIsEmpty,
+    LabelNotDefined(Label),
+	StackUnderflow,
+	StackOverflow,
 }
 
 impl std::error::Error for Error {}
@@ -45,22 +48,29 @@ impl std::fmt::Display for Error {
             Self::ExpectedType(expected_type, register) => {
                 write!(
                     f,
-                    "{} expected type '{expected_type}' in register '{register}'",
-                    err
+                    "{err} expected type '{expected_type}' in register '{register}'"
                 )
             }
 
             Self::ArrayIndexOutOfBounds(index) => {
-                write!(f, "{} index '{index}' is out of bounds for array", err)
+                write!(f, "{err} index '{index}' is out of bounds for array")
             }
 
             Self::DivisionByZero => {
-                write!(f, "{} division by zero", err)
+                write!(f, "{err} division by zero")
             }
 
-            Self::StackIsEmpty => {
-                write!(f, "{} stack is empty", err)
+            Self::LabelNotDefined(label) => {
+                write!(f, "{err} label '{}' is not defined", label.0)
             }
+
+			Self::StackUnderflow => {
+				write!(f, "{err} stack underflow")
+			}
+
+			Self::StackOverflow => {
+				write!(f, "{err} stack overflow")
+			}
         }
     }
 }

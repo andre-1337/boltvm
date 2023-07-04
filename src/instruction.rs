@@ -59,6 +59,8 @@ pub enum Instruction {
 	Push(Value),
 	/// Pops a value from the stack into a register
 	Pop(Register),
+	/// Copy the value of one register to the other
+	CopyReg(Register, Register),
     /// Stop execution
     Halt,
 }

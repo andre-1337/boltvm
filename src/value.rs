@@ -45,6 +45,14 @@ impl Value {
     }
 
 	#[inline]
+	pub fn is_truthy(&self) -> bool {
+		match *self {
+			Value::Bool(value) => value,
+			_ => false,
+		}
+	}
+
+	#[inline]
     pub fn is_list(&self) -> bool {
         match *self {
             Value::Array(_) => true,
